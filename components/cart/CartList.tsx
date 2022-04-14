@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import NextLink from 'next/link';
 import {
     CardActionArea,
@@ -10,31 +10,42 @@ import {
     Button,
 } from '@mui/material';
 
-import { initialData } from '../../database/products';
 import { ItemCounter } from '../ui';
-
-const productsInCart = [
-    initialData.products[0],
-    initialData.products[1],
-    initialData.products[2],
-];
+import { CartContext } from '../../context';
+import { ICartProduct } from '../../interfaces';
+import { IOrderItem } from '../../interfaces/order';
 
 interface CartListProps {
     editable?: boolean;
+    products?: IOrderItem[];
 }
 
-export const CartList: FC<CartListProps> = ({ editable = false }) => {
+export const CartList: FC<CartListProps> = ({ editable = false, products }) => {
+    const { cart, updateCartQuantity, removeCartProduct } = useContext(CartContext);
+    
+    const onNewCartQuantityvalue = (product: ICartProduct, quantity: number) => {
+        product.quantity = quantity
+        updateCartQuantity(product);
+    }
+
+    //check if products are to be used from context or passed as props
+    const productsToShow = products ? products : cart;
+
     return (
         <>
-            {productsInCart.map((product) => (
-                <Grid container spacing={2} key={product.slug} sx={{ mb: 1 }}>
+            { productsToShow.map((product) => (
+                <Grid
+                    container
+                    spacing={2}
+                    key={product.slug + product.size}
+                    sx={{ mb: 1 }}>
                     <Grid item xs={3}>
                         {/*  Take to the product page */}
-                        <NextLink href="/product/slug" passHref>
+                        <NextLink href={`/product/${ product.slug }`} passHref>
                             <Link>
                                 <CardActionArea>
                                     <CardMedia
-                                        image={`/products/${product.images[0]}`}
+                                        image={product.image}
                                         component="img"
                                         sx={{
                                             borderRadius: '5px',
@@ -49,14 +60,20 @@ export const CartList: FC<CartListProps> = ({ editable = false }) => {
                                 {product.title}
                             </Typography>
                             <Typography variant="body1">
-                                Size: <strong>M</strong>
+                                Size: <strong>{product.size}</strong>
                             </Typography>
 
                             {/* Conditional */}
                             {editable ? (
-                                <ItemCounter />
+                                <ItemCounter
+                                    currentValue={product.quantity}
+                                    maxValue={product.quantity > 10 ? 10 : product.quantity}
+                                    updatedQuantity={(qty) => onNewCartQuantityvalue(product as ICartProduct, qty)}
+                                />
                             ) : (
-                                <Typography variant="h5">3 items</Typography>
+                                <Typography variant="h5">
+                                    {product.quantity} {product.quantity > 1 ? 'items' : 'item'}
+                                </Typography>
                             )}
                         </Box>
                     </Grid>
@@ -69,7 +86,7 @@ export const CartList: FC<CartListProps> = ({ editable = false }) => {
                         <Typography variant="subtitle1">{`$${product.price}`}</Typography>
                         {/* Editable */}
                         {editable && (
-                            <Button variant="text" color="secondary">
+                            <Button variant="text" color="secondary" onClick={() => removeCartProduct(product as ICartProduct )}>
                                 Remove
                             </Button>
                         )}
