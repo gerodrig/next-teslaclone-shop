@@ -44,7 +44,7 @@ const searchProducts = async (
             .select('title images price inStock slug -_id')
             .lean();
 
-        console.log(products);
+        //console.log(products);
 
         await db.disconnect();
 

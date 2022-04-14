@@ -72,7 +72,7 @@ const LoginPage = () => {
         //Impleneting Nexauth
         const result = await signIn('credentials', { email, password });
 
-        console.log(result);
+        //console.log(result);
     };
 
     return (

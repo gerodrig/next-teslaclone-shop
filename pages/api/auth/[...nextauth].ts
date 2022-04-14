@@ -16,7 +16,7 @@ export default NextAuth({
             },
             async authorize(credentials,){
 
-                console.log(credentials);
+                //console.log(credentials);
 
                 //TODO: Implement custom login logic here and validate credentials in database
                 //return {name: 'Mimi Chinchilla', email: 'Mimi@test.com', role: 'admin'};

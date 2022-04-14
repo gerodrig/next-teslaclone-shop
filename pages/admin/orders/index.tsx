@@ -56,7 +56,7 @@ const columns: GridColDef[] = [
 const OrdersPage = () => {
     const { data, error } = useSWR<IOrder[]>('/api/admin/orders');
 
-    console.log({ data });
+    //console.log({ data });
 
     //convert date format 2022-04-09T00:28:21.172Z t0 DD/MM/YYYY
     const convertDate = (date: string): string => {

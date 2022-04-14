@@ -30,7 +30,7 @@ export const AuthProvider: FC = ({ children }) => {
     //useEffect to check if user is logged in
     useEffect(() => {
         if(status === 'authenticated') {
-            console.log({user: data?.user});
+            //console.log({user: data?.user});
 
             dispatch({ type: '[Auth] - Login', payload: data?.user as IUser });
         }

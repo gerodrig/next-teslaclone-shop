@@ -53,7 +53,7 @@ const DashboardPage = () => {
     }
 
     if (error) {
-        console.log(error);
+        //console.log(error);
         return (
             <Box
                 display="flex"
