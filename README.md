@@ -22,3 +22,7 @@ Call:
 ```
 http://localhost:3000/api/seed
 ```
+
+
+## Sample Webpage
+https://tesclone-shop.herokuapp.com/
